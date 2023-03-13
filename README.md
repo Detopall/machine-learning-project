@@ -13,6 +13,8 @@
   - [Train V2 Cleaned](#train-v2-cleaned)
   - [Score Cleaned](#score-cleaned)
   - [Top Customers](#top-customers)
+- [HTML folder](#html-folder)
+- [Report](#report)
 
 ## Notebooks
 
@@ -71,3 +73,15 @@ After the file 'score' has been cleaned, this file was used to predict the value
 ### **Top Customers**
 
 'top_customers' contains 200 smurfs with the best data possible. In the report the ideal smurfs is also described based on these findings.
+
+## HTML folder
+
+---
+
+This HTML folder contains all the notebooks transformed into html files. This is required by the deliverables.
+
+## Report
+
+---
+
+This report contains a brief explanation to the context, goal, the models used, best Smurf/customer and much more.
