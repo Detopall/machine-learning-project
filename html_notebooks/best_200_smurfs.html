@@ -14618,13 +14618,31 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="c1"># Load the dataset into a Pandas DataFrame</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;score_cleaned.csv&#39;</span><span class="p">)</span>
+<span class="n">current_predictions</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;current_predictions.csv&#39;</span><span class="p">)</span>
+
+<span class="c1"># Drop the columns from the prediction, we are going to add it right after from the &#39;current_predictions&#39; file</span>
+<span class="k">if</span> <span class="s1">&#39;outcome_damage_amount&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+	<span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;outcome_damage_amount&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="s1">&#39;outcome_damage_inc&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+	<span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;outcome_damage_inc&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="s2">&quot;outcome_profit&quot;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+	<span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;outcome_profit&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Select the columns of interest from the current_predictions DataFrame</span>
+<span class="n">current_predictions_filtered</span> <span class="o">=</span> <span class="n">current_predictions</span><span class="p">[[</span><span class="s1">&#39;outcome_profit&#39;</span><span class="p">,</span> <span class="s1">&#39;outcome_damage_inc&#39;</span><span class="p">,</span> <span class="s1">&#39;outcome_damage_amount&#39;</span><span class="p">]]</span>
+
+<span class="c1"># Merge the selected columns from the current_predictions DataFrame into the DataFrame</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">current_predictions_filtered</span><span class="p">,</span> <span class="n">left_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">right_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
 
 <span class="c1"># Define the columns to sort by</span>
 <span class="n">columns_to_sort_by</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;income_am&#39;</span><span class="p">,</span> <span class="s1">&#39;profit_last_am&#39;</span><span class="p">,</span> <span class="s1">&#39;profit_am&#39;</span><span class="p">,</span> <span class="s1">&#39;crd_lim_rec&#39;</span><span class="p">,</span> <span class="s1">&#39;cab_requests&#39;</span><span class="p">,</span> <span class="s1">&#39;neighbor_income&#39;</span><span class="p">,</span> <span class="s1">&#39;nights_booked&#39;</span><span class="p">,</span> <span class="s1">&#39;shop_am&#39;</span><span class="p">,</span> <span class="s1">&#39;score_pos&#39;</span><span class="p">,</span> <span class="s1">&#39;insured&#39;</span><span class="p">,</span> <span class="s1">&#39;spa&#39;</span><span class="p">,</span> <span class="s1">&#39;sport&#39;</span><span class="p">,</span> <span class="s1">&#39;marketing_perm&#39;</span><span class="p">,</span> <span class="s1">&#39;yes_presidential&#39;</span><span class="p">,</span> <span class="s1">&#39;yes_prev_all_in_stay&#39;</span><span class="p">,</span> <span class="s1">&#39;yes_shop_use&#39;</span><span class="p">,</span> <span class="s1">&#39;yes_gold_status&#39;</span><span class="p">,</span> <span class="s1">&#39;outcome_profit&#39;</span><span class="p">]</span>
@@ -14640,6 +14658,10 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 <span class="c1"># Select the top 200 customers</span>
 <span class="n">top_customers</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+
+<span class="c1"># Clear the contents of the output file</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;top_customers.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">pass</span>
 
 <span class="c1"># Save the filtered dataset to a new file</span>
 <span class="n">top_customers</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;top_customers.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -14657,11 +14679,95 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>The ideal person will be discussed inside the report.</p>
+<p>We will now take the average of each feature and add the result at the end of the excel file. This smurf would be the most ideal smurf that has ever smurfed.</p>
 
 </div>
 </div>
 </div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Compute the averages of each column, excluding the first row</span>
+<span class="n">avg</span> <span class="o">=</span> <span class="n">top_customers</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Create a new row with the averages</span>
+<span class="n">new_row</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">avg</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+
+<span class="c1"># Set the index of the new row to &#39;Feature Averages&#39;</span>
+<span class="n">new_row</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Feature Averages&#39;</span><span class="p">]</span>
+
+<span class="c1"># Append the new row to the original DataFrame</span>
+<span class="n">top_customers</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">top_customers</span><span class="p">,</span> <span class="n">new_row</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Convert to two decimal numbers</span>
+<span class="n">top_customers</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">top_customers</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="k">else</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="n">top_customers</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;top_customers.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h1 id="5.-Calculating-the-overall-predicted-revenue">5. Calculating the overall predicted revenue<a class="anchor-link" href="#5.-Calculating-the-overall-predicted-revenue">&#182;</a></h1>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># calculating the sum of the outcome_profit</span>
+<span class="n">profit_sum</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;outcome_profit&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">damage_sum</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;outcome_damage_amount&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+<span class="c1"># Print the result</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The profit: $&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">profit_sum</span> <span class="o">-</span> <span class="n">damage_sum</span><span class="p">))</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>The profit: $ 1628220
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
 </div>
 </body>
 
